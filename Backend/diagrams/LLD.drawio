@@ -1,0 +1,128 @@
+<mxfile host="app.diagrams.net" modified="2025-08-21T00:00:00.000Z" agent="Augment" version="20.8.16">
+  <diagram name="LLD">
+    <mxGraphModel dx="1800" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1600" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Services swimlane -->
+        <mxCell id="sl_services" value="Spring Boot Services" style="swimlane;horizontal=0;startSize=28;rounded=1;fillColor=#f5f5f5;strokeColor=#b3b3b3;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="1220" height="750" as="geometry"/>
+        </mxCell>
+
+        <!-- Individual services -->
+        <mxCell id="auth" value="AuthService\n- JWT/OIDC\n- RBAC" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="sl_services">
+          <mxGeometry x="20" y="50" width="180" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="content" value="ContentService\n- Posts CRUD\n- Media mgmt" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="sl_services">
+          <mxGeometry x="220" y="50" width="200" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="schedule" value="SchedulingService\n- Quartz triggers\n- Enqueue jobs" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="sl_services">
+          <mxGeometry x="440" y="50" width="220" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="integration" value="IntegrationService\n- Provider Registry\n- SocialProvider SPI impls" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="sl_services">
+          <mxGeometry x="680" y="50" width="260" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="analytics" value="AnalyticsService\n- Normalize metrics\n- Cache aggregates" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="sl_services">
+          <mxGeometry x="960" y="50" width="220" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="video" value="VideoService\n- Generate/Upload\n- 3rd-party APIs" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="sl_services">
+          <mxGeometry x="960" y="180" width="220" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- Provider SPI box -->
+        <mxCell id="spi" value="Provider Abstraction Layer\nSocialProvider SPI" style="swimlane;horizontal=0;startSize=28;rounded=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="40" y="820" width="1220" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="spi_if" value="IAuthenticator + ISocialMediaIntegration" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="spi">
+          <mxGeometry x="20" y="40" width="300" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="spi_impls" value="Providers: X, LinkedIn, Instagram, YouTube, Pinterest, Reddit, Slack, Discord, Mastodon, etc." style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="spi">
+          <mxGeometry x="340" y="40" width="840" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Data layer -->
+        <mxCell id="db_swim" value="Data Layer" style="swimlane;horizontal=0;startSize=28;rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1290" y="40" width="960" height="960" as="geometry"/>
+        </mxCell>
+        <mxCell id="pg" value="PostgreSQL (RLS)" style="shape=cylinder;whiteSpace=wrap;html=1;" vertex="1" parent="db_swim">
+          <mxGeometry x="30" y="40" width="180" height="80" as="geometry"/>
+        </mxCell>
+        <!-- Entities -->
+        <mxCell id="e_user" value="User" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="db_swim">
+          <mxGeometry x="240" y="40" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_integration" value="Integration (evolved SocialAccount)\n- internal_id\n- provider_identifier\n- token/refresh(excrypted)\n- profile\n- settings JSONB\n- posting_times\n- refresh_needed/in_between_steps" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="db_swim">
+          <mxGeometry x="400" y="40" width="300" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_post" value="Post\n- state/publishDate\n- releaseId/url\n- integration_id\n- error link" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="db_swim">
+          <mxGeometry x="720" y="40" width="220" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_postPlatform" value="PostPlatform\n(post ↔ platform status)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="db_swim">
+          <mxGeometry x="960" y="40" width="220" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_schedule" value="Schedule\n- Quartz rules / custom pattern" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="db_swim">
+          <mxGeometry x="240" y="140" width="140" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_media" value="MediaFile\n- path/thumbnail\n- metadata/dimensions" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="db_swim">
+          <mxGeometry x="240" y="240" width="140" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_template" value="Template" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="db_swim">
+          <mxGeometry x="400" y="220" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_analytics" value="Analytics\n- metric_type/value/time\n- platform_data JSONB" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="db_swim">
+          <mxGeometry x="580" y="220" width="200" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_errors" value="Errors\n- message/body/platform\n- post_id, org_id" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="db_swim">
+          <mxGeometry x="800" y="220" width="160" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_webhooks" value="Webhooks + Integrations_Webhooks" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="db_swim">
+          <mxGeometry x="980" y="220" width="200" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Redis / MQ / Storage -->
+        <mxCell id="redis" value="Redis (Cache/Sessions)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1030" width="200" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="mq" value="Message Queue (Publish Jobs, Retries, Analytics)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#cc9966;" vertex="1" parent="1">
+          <mxGeometry x="260" y="1030" width="420" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="storage" value="Object Storage / CDN (Media)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cce5ff;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="700" y="1030" width="260" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- API structure box -->
+        <mxCell id="api_box" value="API Endpoints (Gateway → Services)\n/auth, /users, /social-accounts, /integrations, /posts, /media, /analytics, /schedules, /public" style="swimlane;horizontal=0;startSize=28;rounded=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="40" y="930" width="1220" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- External APIs -->
+        <mxCell id="socialapis" value="Social APIs (X, LinkedIn, IG, YT, Pinterest, etc.)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1670" y="1040" width="400" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="videoapis" value="Video APIs (Plainly/Creatomate)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="2090" y="1040" width="160" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Edges core -->
+        <mxCell id="a1" edge="1" parent="1" source="schedule" target="mq" style="endArrow=block;"/>
+        <mxCell id="a2" edge="1" parent="1" source="mq" target="integration" style="endArrow=block;dashed=1;"/>
+        <mxCell id="a3" edge="1" parent="1" source="integration" target="socialapis" style="endArrow=block;"/>
+        <mxCell id="a4" edge="1" parent="1" source="video" target="videoapis" style="endArrow=block;"/>
+        <mxCell id="a5" edge="1" parent="1" source="content" target="storage" style="endArrow=block;"/>
+
+        <!-- DB relationships (simplified connectors) -->
+        <mxCell id="r1" edge="1" parent="db_swim" source="e_user" target="e_integration" style="endArrow=block;"/>
+        <mxCell id="r2" edge="1" parent="db_swim" source="e_integration" target="e_post" style="endArrow=block;"/>
+        <mxCell id="r3" edge="1" parent="db_swim" source="e_post" target="e_postPlatform" style="endArrow=block;"/>
+        <mxCell id="r4" edge="1" parent="db_swim" source="e_post" target="e_analytics" style="endArrow=block;dashed=1;"/>
+        <mxCell id="r5" edge="1" parent="db_swim" source="e_post" target="e_errors" style="endArrow=block;dashed=1;"/>
+        <mxCell id="r6" edge="1" parent="db_swim" source="e_integration" target="e_webhooks" style="endArrow=block;dashed=1;"/>
+        <mxCell id="r7" edge="1" parent="db_swim" source="e_user" target="e_schedule" style="endArrow=block;dashed=1;"/>
+        <mxCell id="r8" edge="1" parent="db_swim" source="e_user" target="e_media" style="endArrow=block;dashed=1;"/>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
+

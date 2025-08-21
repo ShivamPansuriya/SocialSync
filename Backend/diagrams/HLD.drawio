@@ -1,0 +1,118 @@
+<mxfile host="app.diagrams.net" modified="2025-08-21T00:00:00.000Z" agent="Augment" version="20.8.16">
+  <diagram name="HLD">
+    <mxGraphModel dx="1480" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Users / Frontend / Gateway -->
+        <mxCell id="u1" value="Users / Browsers" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="f1" value="Frontend (React SPA)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="240" y="80" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="g1" value="API Gateway (Spring Cloud Gateway)\n+ JWT Auth + Rate Limiting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="480" y="70" width="260" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Services -->
+        <mxCell id="svcBox" value="Spring Boot Services" style="swimlane;childLayout=stackLayout;rounded=1;horizontal=0;startSize=28;fillColor=#f5f5f5;strokeColor=#b3b3b3;" vertex="1" parent="1">
+          <mxGeometry x="800" y="40" width="660" height="360" as="geometry"/>
+        </mxCell>
+        <mxCell id="s1" value="AuthService" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="svcBox">
+          <mxGeometry x="20" y="40" width="180" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="s2" value="ContentService" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="svcBox">
+          <mxGeometry x="220" y="40" width="180" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="s3" value="SchedulingService" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="svcBox">
+          <mxGeometry x="420" y="40" width="180" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="s4" value="IntegrationService\n(+ Provider Registry)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="svcBox">
+          <mxGeometry x="20" y="110" width="280" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="s5" value="AnalyticsService" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="svcBox">
+          <mxGeometry x="320" y="110" width="180" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="s6" value="VideoService" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="svcBox">
+          <mxGeometry x="520" y="110" width="120" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Infra / Data -->
+        <mxCell id="db1" value="PostgreSQL\n(Multi-tenant, RLS)" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="900" y="440" width="180" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="cache1" value="Redis (Cache)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="450" width="150" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="mq1" value="Message Queue\n(Jobs/Events)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#cc9966;" vertex="1" parent="1">
+          <mxGeometry x="1310" y="450" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="store1" value="Object Storage / CDN\n(Media)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cce5ff;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1510" y="450" width="180" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- External APIs -->
+        <mxCell id="extSocial" value="Social Media APIs\n(X, LinkedIn, Instagram, YouTube, etc.)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1520" y="120" width="240" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="extVideo" value="Video Processing APIs\n(Plainly/Creatomate)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1520" y="230" width="240" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="mon1" value="Monitoring/Logging\n(Sentry/ELK)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1520" y="330" width="240" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Edges: user to frontend to gateway -->
+        <mxCell id="e1" edge="1" parent="1" source="u1" target="f1" style="endArrow=block;strokeWidth=2;"/>
+        <mxCell id="e2" edge="1" parent="1" source="f1" target="g1" style="endArrow=block;strokeWidth=2;"/>
+
+        <!-- Edges: gateway to services -->
+        <mxCell id="e3" edge="1" parent="1" source="g1" target="s1" style="endArrow=block;dashed=1;"/>
+        <mxCell id="e4" edge="1" parent="1" source="g1" target="s2" style="endArrow=block;dashed=1;"/>
+        <mxCell id="e5" edge="1" parent="1" source="g1" target="s3" style="endArrow=block;dashed=1;"/>
+        <mxCell id="e6" edge="1" parent="1" source="g1" target="s4" style="endArrow=block;dashed=1;"/>
+        <mxCell id="e7" edge="1" parent="1" source="g1" target="s5" style="endArrow=block;dashed=1;"/>
+        <mxCell id="e8" edge="1" parent="1" source="g1" target="s6" style="endArrow=block;dashed=1;"/>
+
+        <!-- Edges: services to data stores -->
+        <mxCell id="e9" edge="1" parent="1" source="s1" target="db1" style="endArrow=block;"/>
+        <mxCell id="e10" edge="1" parent="1" source="s2" target="db1" style="endArrow=block;"/>
+        <mxCell id="e11" edge="1" parent="1" source="s3" target="db1" style="endArrow=block;"/>
+        <mxCell id="e12" edge="1" parent="1" source="s4" target="db1" style="endArrow=block;"/>
+        <mxCell id="e13" edge="1" parent="1" source="s5" target="db1" style="endArrow=block;"/>
+        <mxCell id="e14" edge="1" parent="1" source="s2" target="cache1" style="endArrow=block;dashed=1;"/>
+        <mxCell id="e15" edge="1" parent="1" source="s5" target="cache1" style="endArrow=block;dashed=1;"/>
+        <mxCell id="e16" edge="1" parent="1" source="s2" target="store1" style="endArrow=block;"/>
+
+        <!-- Edges: scheduling/queue -->
+        <mxCell id="e17" edge="1" parent="1" source="s3" target="mq1" style="endArrow=block;"/>
+        <mxCell id="e18" edge="1" parent="1" source="mq1" target="s4" style="endArrow=block;dashed=1;"/>
+        <mxCell id="e19" edge="1" parent="1" source="mq1" target="s5" style="endArrow=block;dashed=1;"/>
+
+        <!-- Edges: external integrations -->
+        <mxCell id="e20" edge="1" parent="1" source="s4" target="extSocial" style="endArrow=block;"/>
+        <mxCell id="e21" edge="1" parent="1" source="s6" target="extVideo" style="endArrow=block;"/>
+
+        <!-- Edges: monitoring -->
+        <mxCell id="e22" edge="1" parent="1" source="s1" target="mon1" style="endArrow=block;dashed=1;"/>
+        <mxCell id="e23" edge="1" parent="1" source="s2" target="mon1" style="endArrow=block;dashed=1;"/>
+        <mxCell id="e24" edge="1" parent="1" source="s3" target="mon1" style="endArrow=block;dashed=1;"/>
+        <mxCell id="e25" edge="1" parent="1" source="s4" target="mon1" style="endArrow=block;dashed=1;"/>
+        <mxCell id="e26" edge="1" parent="1" source="s5" target="mon1" style="endArrow=block;dashed=1;"/>
+        <mxCell id="e27" edge="1" parent="1" source="s6" target="mon1" style="endArrow=block;dashed=1;"/>
+
+        <!-- Deployment boundaries (annotations) -->
+        <mxCell id="bound1" value="K8s / Containers" style="shape=annotation;align=left;verticalAlign=top;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="800" y="10" width="120" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="bound2" value="External Networks" style="shape=annotation;align=left;verticalAlign=top;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1510" y="90" width="150" height="30" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
+
