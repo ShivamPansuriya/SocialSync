@@ -1,0 +1,133 @@
+# Production Environment Configuration
+
+spring:
+  # Database Configuration
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT:5432}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 20
+      idle-timeout: 300000
+      connection-timeout: 20000
+      validation-timeout: 5000
+      leak-detection-threshold: 60000
+  
+  # Redis Configuration
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 32
+          max-idle: 16
+          min-idle: 8
+          max-wait: -1ms
+  
+  # JPA Production Settings
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        use_sql_comments: false
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+
+# Production-specific application settings
+app:
+  # Production JWT settings (more secure)
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: 3600000 # 1 hour
+    refresh-expiration: 86400000 # 24 hours
+  
+  # Production CORS settings (restrictive)
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS}
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS,PATCH
+    allowed-headers: Authorization,Content-Type,X-Requested-With
+    allow-credentials: true
+    max-age: 3600
+  
+  # Production file upload settings
+  upload:
+    storage-path: ${UPLOAD_STORAGE_PATH:/app/uploads}
+    max-file-size: 50MB
+  
+  # Production social media settings
+  social:
+    rate-limit:
+      requests-per-minute: 30 # More conservative in production
+      burst-capacity: 50
+    
+    oauth2:
+      facebook:
+        client-id: ${FACEBOOK_CLIENT_ID}
+        client-secret: ${FACEBOOK_CLIENT_SECRET}
+        redirect-uri: ${PRODUCTION_BASE_URL}/api/v1/auth/oauth2/callback/facebook
+      
+      instagram:
+        client-id: ${INSTAGRAM_CLIENT_ID}
+        client-secret: ${INSTAGRAM_CLIENT_SECRET}
+        redirect-uri: ${PRODUCTION_BASE_URL}/api/v1/auth/oauth2/callback/instagram
+      
+      twitter:
+        client-id: ${TWITTER_CLIENT_ID}
+        client-secret: ${TWITTER_CLIENT_SECRET}
+        redirect-uri: ${PRODUCTION_BASE_URL}/api/v1/auth/oauth2/callback/twitter
+      
+      youtube:
+        client-id: ${YOUTUBE_CLIENT_ID}
+        client-secret: ${YOUTUBE_CLIENT_SECRET}
+        redirect-uri: ${PRODUCTION_BASE_URL}/api/v1/auth/oauth2/callback/youtube
+      
+      pinterest:
+        client-id: ${PINTEREST_CLIENT_ID}
+        client-secret: ${PINTEREST_CLIENT_SECRET}
+        redirect-uri: ${PRODUCTION_BASE_URL}/api/v1/auth/oauth2/callback/pinterest
+
+# Production logging (minimal, structured)
+logging:
+  level:
+    com.socialsync: INFO
+    org.springframework.security: WARN
+    org.springframework.web: WARN
+    org.hibernate.SQL: WARN
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN
+    root: WARN
+  file:
+    name: /app/logs/socialsync-prod.log
+  logback:
+    rollingpolicy:
+      max-file-size: 100MB
+      max-history: 90
+      total-size-cap: 10GB
+
+# Production actuator settings (minimal exposure)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: never
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# Production server settings
+server:
+  compression:
+    enabled: true
+  http2:
+    enabled: true

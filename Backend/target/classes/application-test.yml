@@ -1,0 +1,71 @@
+# Test Environment Configuration
+
+spring:
+  # Use H2 in-memory database for tests
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+  
+  # H2 Console for debugging tests (if needed)
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  
+  # JPA Test Settings
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+  
+  # Disable Flyway for tests (use JPA DDL generation instead)
+  flyway:
+    enabled: false
+  
+  # Use embedded Redis for tests
+  data:
+    redis:
+      host: localhost
+      port: 6370  # Different port to avoid conflicts
+      timeout: 1000ms
+
+# Test-specific application settings
+app:
+  # Test JWT settings (shorter expiration for faster tests)
+  jwt:
+    secret: test-jwt-secret-key-for-testing-only-not-for-production-use-minimum-256-bits
+    expiration: 60000 # 1 minute
+    refresh-expiration: 300000 # 5 minutes
+  
+  # Test CORS settings (permissive for testing)
+  cors:
+    allowed-origins: "*"
+    allowed-methods: "*"
+    allowed-headers: "*"
+    allow-credentials: true
+
+# Test logging (minimal)
+logging:
+  level:
+    com.socialsync: DEBUG
+    org.springframework.security: WARN
+    org.springframework.web: WARN
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN
+    org.testcontainers: INFO
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# Disable actuator endpoints in tests
+management:
+  endpoints:
+    enabled-by-default: false
+  endpoint:
+    health:
+      enabled: true

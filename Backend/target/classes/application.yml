@@ -1,0 +1,134 @@
+# SocialSync Application Configuration
+# Main configuration file with common settings
+
+spring:
+  application:
+    name: socialsync-backend
+  
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+    open-in-view: false
+  
+  # Flyway Configuration
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    validate-on-migrate: true
+  
+  # Jackson Configuration
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    time-zone: UTC
+    default-property-inclusion: non_null
+  
+  # Servlet Configuration
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 100MB
+  
+  # Cache Configuration
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600000 # 1 hour in milliseconds
+
+# Server Configuration
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /api/v1
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# Management/Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when_authorized
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# Application Specific Configuration
+app:
+  name: SocialSync
+  version: 1.0.0
+  description: Social Media Management Platform
+  
+  # JWT Configuration
+  jwt:
+    secret: ${JWT_SECRET:default-secret-key-change-in-production}
+    expiration: 86400000 # 24 hours in milliseconds
+    refresh-expiration: 604800000 # 7 days in milliseconds
+  
+  # CORS Configuration
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001}
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS,PATCH
+    allowed-headers: "*"
+    allow-credentials: true
+    max-age: 3600
+  
+  # File Upload Configuration
+  upload:
+    max-file-size: 50MB
+    allowed-image-types: jpg,jpeg,png,gif,webp
+    allowed-video-types: mp4,mov,avi,mkv,webm
+    storage-path: ${UPLOAD_STORAGE_PATH:./uploads}
+  
+  # Social Media Integration Configuration
+  social:
+    rate-limit:
+      requests-per-minute: 60
+      burst-capacity: 100
+    
+    # OAuth2 Redirect URIs
+    oauth2:
+      redirect-uri: ${OAUTH2_REDIRECT_URI:http://localhost:8080/api/v1/auth/oauth2/callback}
+  
+  # Video Processing Configuration
+  video:
+    processing:
+      enabled: ${VIDEO_PROCESSING_ENABLED:false}
+      max-duration: 300 # 5 minutes in seconds
+      max-resolution: 1920x1080
+
+# Logging Configuration
+logging:
+  level:
+    com.socialsync: ${LOG_LEVEL:INFO}
+    org.springframework.security: ${SECURITY_LOG_LEVEL:WARN}
+    org.springframework.web: ${WEB_LOG_LEVEL:WARN}
+    org.hibernate.SQL: ${SQL_LOG_LEVEL:WARN}
+    org.hibernate.type.descriptor.sql.BasicBinder: ${SQL_PARAM_LOG_LEVEL:WARN}
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

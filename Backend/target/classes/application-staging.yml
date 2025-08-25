@@ -1,0 +1,110 @@
+# Staging Environment Configuration
+
+spring:
+  # Database Configuration
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT:5432}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 10
+      idle-timeout: 300000
+      connection-timeout: 20000
+      validation-timeout: 5000
+      leak-detection-threshold: 60000
+  
+  # Redis Configuration
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 16
+          max-idle: 8
+          min-idle: 2
+          max-wait: -1ms
+  
+  # JPA Staging Settings
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        use_sql_comments: false
+
+# Staging-specific application settings
+app:
+  # Staging JWT settings
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: 43200000 # 12 hours
+    refresh-expiration: 259200000 # 3 days
+  
+  # Staging CORS settings
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS}
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS,PATCH
+    allowed-headers: "*"
+    allow-credentials: true
+  
+  # Staging file upload settings
+  upload:
+    storage-path: ${UPLOAD_STORAGE_PATH:/app/uploads}
+  
+  # Staging social media settings
+  social:
+    oauth2:
+      facebook:
+        client-id: ${FACEBOOK_CLIENT_ID}
+        client-secret: ${FACEBOOK_CLIENT_SECRET}
+        redirect-uri: ${STAGING_BASE_URL}/api/v1/auth/oauth2/callback/facebook
+      
+      instagram:
+        client-id: ${INSTAGRAM_CLIENT_ID}
+        client-secret: ${INSTAGRAM_CLIENT_SECRET}
+        redirect-uri: ${STAGING_BASE_URL}/api/v1/auth/oauth2/callback/instagram
+      
+      twitter:
+        client-id: ${TWITTER_CLIENT_ID}
+        client-secret: ${TWITTER_CLIENT_SECRET}
+        redirect-uri: ${STAGING_BASE_URL}/api/v1/auth/oauth2/callback/twitter
+      
+      youtube:
+        client-id: ${YOUTUBE_CLIENT_ID}
+        client-secret: ${YOUTUBE_CLIENT_SECRET}
+        redirect-uri: ${STAGING_BASE_URL}/api/v1/auth/oauth2/callback/youtube
+      
+      pinterest:
+        client-id: ${PINTEREST_CLIENT_ID}
+        client-secret: ${PINTEREST_CLIENT_SECRET}
+        redirect-uri: ${STAGING_BASE_URL}/api/v1/auth/oauth2/callback/pinterest
+
+# Staging logging
+logging:
+  level:
+    com.socialsync: INFO
+    org.springframework.security: WARN
+    org.springframework.web: WARN
+    org.hibernate.SQL: WARN
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN
+  file:
+    name: /app/logs/socialsync-staging.log
+  logback:
+    rollingpolicy:
+      max-file-size: 50MB
+      max-history: 30
+
+# Staging actuator settings
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when_authorized

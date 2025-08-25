@@ -1,0 +1,123 @@
+# Development Environment Configuration
+
+spring:
+  # Database Configuration
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:socialsync}
+    username: ${DB_USERNAME:socialsync}
+    password: ${DB_PASSWORD:socialsync_dev_password}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+      validation-timeout: 5000
+      leak-detection-threshold: 60000
+  
+  # Redis Configuration
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:redis_dev_password}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+  
+  # JPA Development Settings
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+  
+  # DevTools Configuration
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+# Development-specific application settings
+app:
+  # Development JWT settings (less secure for easier testing)
+  jwt:
+    secret: dev-jwt-secret-key-for-development-only-not-for-production-use
+    expiration: 86400000 # 24 hours
+    refresh-expiration: 604800000 # 7 days
+  
+  # Development CORS settings (more permissive)
+  cors:
+    allowed-origins: 
+      - http://localhost:3000
+      - http://localhost:3001
+      - http://127.0.0.1:3000
+      - http://127.0.0.1:3001
+    allowed-methods: "*"
+    allowed-headers: "*"
+    allow-credentials: true
+  
+  # Development file upload settings
+  upload:
+    storage-path: ./dev-uploads
+  
+  # Development social media settings
+  social:
+    oauth2:
+      # Development OAuth2 settings
+      facebook:
+        client-id: ${FACEBOOK_CLIENT_ID:}
+        client-secret: ${FACEBOOK_CLIENT_SECRET:}
+        redirect-uri: http://localhost:8080/api/v1/auth/oauth2/callback/facebook
+      
+      instagram:
+        client-id: ${INSTAGRAM_CLIENT_ID:}
+        client-secret: ${INSTAGRAM_CLIENT_SECRET:}
+        redirect-uri: http://localhost:8080/api/v1/auth/oauth2/callback/instagram
+      
+      twitter:
+        client-id: ${TWITTER_CLIENT_ID:}
+        client-secret: ${TWITTER_CLIENT_SECRET:}
+        redirect-uri: http://localhost:8080/api/v1/auth/oauth2/callback/twitter
+      
+      youtube:
+        client-id: ${YOUTUBE_CLIENT_ID:}
+        client-secret: ${YOUTUBE_CLIENT_SECRET:}
+        redirect-uri: http://localhost:8080/api/v1/auth/oauth2/callback/youtube
+      
+      pinterest:
+        client-id: ${PINTEREST_CLIENT_ID:}
+        client-secret: ${PINTEREST_CLIENT_SECRET:}
+        redirect-uri: http://localhost:8080/api/v1/auth/oauth2/callback/pinterest
+
+# Development logging (more verbose)
+logging:
+  level:
+    com.socialsync: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.data.redis: DEBUG
+  file:
+    name: logs/socialsync-dev.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 7
+
+# Development actuator settings (more endpoints exposed)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
