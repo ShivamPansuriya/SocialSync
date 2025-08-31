@@ -103,8 +103,7 @@ public class SecurityConfig {
                 .frameOptions().deny()
                 .contentTypeOptions().and()
                 .httpStrictTransportSecurity(hstsConfig -> hstsConfig
-                    .maxAgeInSeconds(31536000)
-                    .includeSubdomains(true)
+                    .maxAgeInSeconds(31536000).includeSubDomains(true)
                 )
             );
 
